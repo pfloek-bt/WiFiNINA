@@ -488,7 +488,8 @@ uint8_t ServerDrv::checkDataSent(uint8_t sock)
 		if (_data) timeout = 0;
 		else{
 			++timeout;
-			delay(100);
+                        unsigned long start = millis();
+                        while(millis() - start < 100);
 		}
 
 	}while((_data==0)&&(timeout<TIMEOUT_DATA_SENT));

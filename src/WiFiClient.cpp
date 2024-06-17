@@ -64,8 +64,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
     	unsigned long start = millis();
 
     	// wait 4 second for the connection to close
-    	while (!connected() && millis() - start < 10000)
-    		delay(1);
+    	while (!connected() && millis() - start < _conn_timeout);
 
     	if (!connected())
        	{
@@ -93,8 +92,7 @@ int WiFiClient::connectSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      while (!connected() && millis() - start < _conn_timeout);
 
       if (!connected())
         {
@@ -122,8 +120,7 @@ int WiFiClient::connectSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      while (!connected() && millis() - start < _conn_timeout);
 
       if (!connected())
         {
@@ -151,8 +148,7 @@ int WiFiClient::connectBearSSL(IPAddress ip, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      while (!connected() && millis() - start < _conn_timeout);
 
       if (!connected())
         {
@@ -180,8 +176,7 @@ int WiFiClient::connectBearSSL(const char *host, uint16_t port)
       unsigned long start = millis();
 
       // wait 4 second for the connection to close
-      while (!connected() && millis() - start < 10000)
-        delay(1);
+      while (!connected() && millis() - start < _conn_timeout);
 
       if (!connected())
         {
@@ -298,10 +293,9 @@ void WiFiClient::stop() {
 
   ServerDrv::stopClient(_sock);
 
-  int count = 0;
+  unsigned long start = 0;
   // wait maximum 5 secs for the connection to close
-  while (status() != CLOSED && ++count < 50)
-    delay(100);
+  while (status() != CLOSED && millis() - start < 5000);
 
   WiFiSocketBuffer.close(_sock);
   _sock = 255;

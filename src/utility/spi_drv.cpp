@@ -105,9 +105,14 @@ void SpiDrv::begin()
       digitalWrite(NINA_GPIO0, HIGH);
       digitalWrite(SLAVESELECT, HIGH);
       digitalWrite(SLAVERESET, inverted_reset ? HIGH : LOW);
-      delay(10);
+
+      unsigned long now = millis();
+      while(millis() - now < 10);
+
       digitalWrite(SLAVERESET, inverted_reset ? LOW : HIGH);
-      delay(750);
+
+      unsigned long now = millis();
+      while(millis() - now < 750);
 
       digitalWrite(NINA_GPIO0, LOW);
       pinMode(NINA_GPIOIRQ, INPUT);

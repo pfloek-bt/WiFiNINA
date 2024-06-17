@@ -64,6 +64,7 @@ private:
   uint8_t _sock;   //not used
   uint16_t  _socket;
   bool _retrySend;
+  static unsigned long _conn_timeout = 4000;
 };
 
 #endif

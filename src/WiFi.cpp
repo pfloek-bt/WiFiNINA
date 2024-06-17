@@ -21,6 +21,10 @@
 #include "utility/wifi_drv.h"
 #include "WiFi.h"
 
+static inline void nc_delay(unsigned long ms){
+	for(unsigned long start = millis(); millis() - start < ms;);
+}
+
 extern "C" {
   #include "utility/wl_definitions.h"
   #include "utility/wl_types.h"
@@ -50,7 +54,7 @@ int WiFiClass::begin(const char* ssid)
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
 		   feedWatchdog();
-		   delay(WL_DELAY_START_CONNECTION);
+		   nc_delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 		     break;
@@ -73,7 +77,7 @@ int WiFiClass::begin(const char* ssid, uint8_t key_idx, const char *key)
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
 		   feedWatchdog();
-		   delay(WL_DELAY_START_CONNECTION);
+		   nc_delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 		     break;
@@ -95,7 +99,7 @@ int WiFiClass::begin(const char* ssid, const char *passphrase)
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
  	   {
 		   feedWatchdog();
- 		   delay(WL_DELAY_START_CONNECTION);
+ 		   nc_delay(WL_DELAY_START_CONNECTION);
  		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 		     break;
@@ -120,7 +124,7 @@ uint8_t WiFiClass::beginAP(const char *ssid, uint8_t channel)
    {
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
-		   delay(WL_DELAY_START_CONNECTION);
+		   nc_delay(WL_DELAY_START_CONNECTION);
 		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 		     break;
@@ -147,7 +151,7 @@ uint8_t WiFiClass::beginAP(const char *ssid, const char* passphrase, uint8_t cha
     {
 	   for (unsigned long start = millis(); (millis() - start) < _timeout;)
 	   {
- 		   delay(WL_DELAY_START_CONNECTION);
+ 		   nc_delay(WL_DELAY_START_CONNECTION);
  		   status = WiFiDrv::getConnectionStatus();
 		   if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 		     break;
@@ -178,7 +182,7 @@ uint8_t WiFiClass::beginEnterprise(const char* ssid, const char* username, const
 	{
 		for (unsigned long start = millis(); (millis() - start) < _timeout;)
 		{
-			delay(WL_DELAY_START_CONNECTION);
+			nc_delay(WL_DELAY_START_CONNECTION);
 			status = WiFiDrv::getConnectionStatus();
 			if ((status != WL_IDLE_STATUS) && (status != WL_NO_SSID_AVAIL) && (status != WL_SCAN_COMPLETED)) {
 				break;
@@ -298,7 +302,7 @@ int8_t WiFiClass::scanNetworks()
 		return WL_FAILURE;
  	do
  	{
- 		delay(2000);
+		nc_delay(2000);
  		numOfNetworks = WiFiDrv::getScanNetworks();
  	}
 	while (( numOfNetworks == 0)&&(--attempts>0));
